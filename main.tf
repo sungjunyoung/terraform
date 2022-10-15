@@ -4,7 +4,7 @@ module "vpc" {
   cidr_block       = "172.10.0.0/19"
   eks_cluster_name = "sungjunyoung"
   private_subnets  = ["172.10.0.0/22", "172.10.4.0/22"]
-  public_subnets   = ["172.10.31.0/24"]
+  public_subnets   = ["172.10.30.0/24", "172.10.31.0/24"]
 }
 
 module "eks" {
@@ -18,4 +18,12 @@ module "eks" {
   worker_node_max_size     = 2
   user_arn                 = "arn:aws:iam::153178401710:user/sungjunyoung"
   username                 = "sungjunyoung"
+}
+
+module "alb" {
+  source = "./modules/alb"
+
+  nlb_ips           = ["172.10.5.123", "172.10.0.8"]
+  public_subnet_ids = module.vpc.public_subnet_ids
+  vpc_id            = module.vpc.vpc_id
 }
