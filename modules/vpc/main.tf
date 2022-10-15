@@ -19,7 +19,8 @@ resource "aws_subnet" "private" {
   availability_zone       = var.azs[each.value%3]
   tags                    = merge(
     {for eks_cluster_name in [var.eks_cluster_name] : "kubernetes.io/cluster/${eks_cluster_name}" => "shared"},
-    { Name = "${var.vpc_name}-private-${var.azs[each.value%3]}" }
+    { Name = "${var.vpc_name}-private-${var.azs[each.value%3]}"},
+    { "kubernetes.io/role/internal-elb" = "1" }
   )
 }
 
