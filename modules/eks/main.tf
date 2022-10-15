@@ -37,6 +37,14 @@ module "eks" {
     }
   }
   node_security_group_additional_rules = {
+    ingress_worker = {
+      description      = "Allow worker ingress"
+      protocol         = "-1"
+      from_port        = 0
+      to_port          = 0
+      type             = "ingress"
+      cidr_blocks      = ["172.10.0.0/19"]
+    }
     egress_all = {
       description      = "Allow all egress"
       protocol         = "-1"
@@ -56,6 +64,9 @@ module "eks" {
       groups   = ["system:masters"]
     },
   ]
+
+  cluster_enabled_log_types = []
+  create_cloudwatch_log_group = false
 }
 
 data "aws_eks_cluster" "sungjunyoung" {
