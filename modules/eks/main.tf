@@ -26,7 +26,15 @@ module "eks" {
     instance_types = var.instance_types
   }
   eks_managed_node_groups = {
-    blue  = {}
+    blue = {
+      // blue 는 사용하지 않음
+      min_size = 0
+      max_size     = 1
+      desired_size = 0
+
+      instance_types = var.instance_types
+      capacity_type  = "SPOT"
+    }
     green = {
       min_size     = 1
       max_size     = var.worker_node_max_size
@@ -38,12 +46,12 @@ module "eks" {
   }
   node_security_group_additional_rules = {
     ingress_worker = {
-      description      = "Allow worker ingress"
-      protocol         = "-1"
-      from_port        = 0
-      to_port          = 0
-      type             = "ingress"
-      cidr_blocks      = ["172.10.0.0/19"]
+      description = "Allow worker ingress"
+      protocol    = "-1"
+      from_port   = 0
+      to_port     = 0
+      type        = "ingress"
+      cidr_blocks = ["172.10.0.0/19"]
     }
     egress_all = {
       description      = "Allow all egress"
@@ -62,10 +70,10 @@ module "eks" {
       userarn  = var.user_arn
       username = var.username
       groups   = ["system:masters"]
-    },
+    }
   ]
 
-  cluster_enabled_log_types = []
+  cluster_enabled_log_types   = []
   create_cloudwatch_log_group = false
 }
 
