@@ -31,9 +31,11 @@ resource "aws_subnet" "public" {
   cidr_block              = each.key
   map_public_ip_on_launch = true
   availability_zone       = var.azs[each.value%3]
-  tags                    = {
-    Name = "${var.vpc_name}-public-${var.azs[each.value%3]}"
-  }
+  tags                    = merge(
+    {for eks_cluster_name in [var.eks_cluster_name] : "kubernetes.io/cluster/${eks_cluster_name}" => "shared"},
+    { Name = "${var.vpc_name}-public-${var.azs[each.value%3]}"},
+    { "kubernetes.io/role/elb" = "1" }
+  )
 }
 
 #---
