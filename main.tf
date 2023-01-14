@@ -1,3 +1,7 @@
+provider "aws" {
+  region = "ap-northeast-2"
+}
+
 module "vpc" {
   source = "./modules/vpc"
 
@@ -18,12 +22,4 @@ module "eks" {
   worker_node_max_size     = 2
   user_arn                 = "arn:aws:iam::153178401710:user/sungjunyoung"
   username                 = "sungjunyoung"
-}
-
-module "alb" {
-  source = "./modules/alb"
-
-  nlb_ips           = ["172.10.5.123", "172.10.0.8"]
-  public_subnet_ids = module.vpc.public_subnet_ids
-  vpc_id            = module.vpc.vpc_id
 }
