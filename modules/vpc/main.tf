@@ -19,7 +19,7 @@ resource "aws_subnet" "private" {
   availability_zone       = var.azs[each.value%3]
   tags                    = merge(
     {for eks_cluster_name in [var.eks_cluster_name] : "kubernetes.io/cluster/${eks_cluster_name}" => "shared"},
-    { Name = "${var.vpc_name}-private-${var.azs[each.value%3]}"},
+    { Name = "${var.vpc_name}-private-${var.azs[each.value%3]}" },
     { "kubernetes.io/role/internal-elb" = "1" }
   )
 }
@@ -33,7 +33,7 @@ resource "aws_subnet" "public" {
   availability_zone       = var.azs[each.value%3]
   tags                    = merge(
     {for eks_cluster_name in [var.eks_cluster_name] : "kubernetes.io/cluster/${eks_cluster_name}" => "shared"},
-    { Name = "${var.vpc_name}-public-${var.azs[each.value%3]}"},
+    { Name = "${var.vpc_name}-public-${var.azs[each.value%3]}" },
     { "kubernetes.io/role/elb" = "1" }
   )
 }
@@ -53,7 +53,6 @@ resource "aws_internet_gateway" "sungjunyoung" {
 # NAT Gateway
 #---
 resource "aws_eip" "sungjunyoung" {
-  vpc        = true
   depends_on = [aws_internet_gateway.sungjunyoung]
   tags       = {
     Name = var.vpc_name

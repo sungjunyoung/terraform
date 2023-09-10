@@ -9,7 +9,7 @@ variable "cidr_block" {
 
 variable "azs" {
   type    = list(string)
-  default = ["ap-northeast-2b", "ap-northeast-2c"]
+  default = ["ap-northeast-2a", "ap-northeast-2c"]
 }
 
 variable "private_subnets" {
